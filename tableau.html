@@ -1,0 +1,89 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dashboard</title>
+
+	  <script type="text/javascript" 
+	    src="https://public.tableau.com/javascripts/api/tableau-2.min.js"></script>
+   
+
+</head>
+<body onload="initViz();" >
+<br/>
+<form name="tableau" id="tableau">
+	
+	 <input type="button" name="test" value="Run" onclick="filterSingleValue();"/>
+	 
+	<select id="tableau" onclick="addValuesToFilter();">
+		<option value="All">All</option>
+		<option value="Furniture">Furniture</option>
+		<option value="Office Supplies">Office Supplies</option>
+		<option value="Technology">Technology</option>
+	</select>
+
+	<div id="controls" style="padding:20px;">
+        Category: <select id="changeCategory" onchange="categoryFilter(value);">
+        <option value="">All</option>
+		<option value="Furniture">Furniture</option>
+		<option value="Office Supplies">Office Supplies</option>
+		<option value="Technology">Technology</option>      
+        </select>
+    </div>
+
+<div id="vizContainer"></div>
+<script type="text/javascript">
+	var workbook;
+var activeSheet;
+
+function initViz() {
+            var containerDiv = document.getElementById("vizContainer"),
+                url = "https://public.tableau.com/views/Testing_312/Sheet1?:embed=y&:display_count=yes&publish=yes",
+                options = {
+                   "Category": "",
+                    
+    			hideTabs: true,
+                hideToolbar: true,
+   				onFirstInteractive: function () {
+      			workbook = viz.getWorkbook();
+      			activeSheet = workbook.getActiveSheet();
+       			console.log("Run this code when the viz has finished loading.");
+                    }
+                };
+            
+            var viz = new tableau.Viz(containerDiv, url, options); 
+            // Create a viz object and embed it in the container div.
+        }
+       $(initializeViz);
+
+function filterSingleValue() {
+        activeSheet.applyFilterAsync(
+         "Category",
+         "Furniture",
+        tableau.FilterUpdateType.REPLACE);
+}  
+
+ $(initializeViz);
+
+function addValuesToFilter() {
+  activeSheet.applyFilterAsync(
+    "Category",
+    ["All","Furniture", "Office Supplies","Technology"],
+    tableau.FilterUpdateType.ADD);
+}
+
+$(initializeViz);
+
+function categoryFilter(category) {
+          
+            if (category === "") {
+                activeSheet.clearFilterAsync("Category");
+            } else {
+               activeSheet.applyFilterAsync("Category",category, tableau.FilterUpdateType.REPLACE);
+            }
+        }
+</script>
+
+</form>
+</body>
+</html>
